@@ -2,15 +2,16 @@ interface SparklineProps {
   data: number[];
   width?: number;
   height?: number;
+  /** Override line color. When omitted, color is derived from the trend direction (green for up, red for down). */
   color?: string;
   fill?: boolean;
 }
 
 /**
  * Inline sparkline chart component.
- * Perfect for showing trends in KPI cards.
+ * Renders a small SVG line chart, ideal for showing trends inside KPI cards or table cells.
  */
-export function Sparkline({ data, width = 100, height = 30, color = "#6366f1", fill = true }: SparklineProps) {
+export function Sparkline({ data, width = 100, height = 30, color, fill = true }: SparklineProps) {
   if (data.length < 2) return null;
   
   const min = Math.min(...data);
@@ -27,7 +28,8 @@ export function Sparkline({ data, width = 100, height = 30, color = "#6366f1", f
   const fillD = pathD + ` L ${width} ${height} L 0 ${height} Z`;
   
   const trend = data[data.length - 1] >= data[0] ? "up" : "down";
-  const lineColor = trend === "up" ? "#22c55e" : "#ef4444";
+  const trendColor = trend === "up" ? "#22c55e" : "#ef4444";
+  const lineColor = color ?? trendColor;
   
   return (
     <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`}>
