@@ -1,6 +1,8 @@
-# Grouped weekly updates: one PR per dependency class instead of one per
-# package, and no unattended major bumps (TypeScript 6/7 breaks ts-jest 29,
-# which is what left this repo's CI red on every dependabot branch).
+# Dependency policy
+#   * one grouped PR per class, weekly (Monday)
+#   * minor + patch only: major bumps are never opened unattended, because
+#     TypeScript 6/7, vite 8 and friends break these builds on arrival.
+#     Do majors deliberately: `npx npm-check-updates -u` on a branch.
 version: 2
 updates:
   - package-ecosystem: npm
@@ -12,17 +14,10 @@ updates:
     commit-message:
       prefix: chore(deps)
     ignore:
-      - dependency-name: typescript
-        update-types:
-          - version-update:semver-major
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
     groups:
       development:
         dependency-type: development
-        update-types:
-          - minor
-          - patch
       production:
         dependency-type: production
-        update-types:
-          - minor
-          - patch
