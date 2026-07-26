@@ -1,6 +1,6 @@
 # Grouped weekly updates: one PR per dependency class instead of one per
-# package. Major production bumps still come through individually so they
-# get a real review.
+# package, and no unattended major bumps (TypeScript 6/7 breaks ts-jest 29,
+# which is what left this repo's CI red on every dependabot branch).
 version: 2
 updates:
   - package-ecosystem: npm
@@ -11,9 +11,16 @@ updates:
     open-pull-requests-limit: 3
     commit-message:
       prefix: chore(deps)
+    ignore:
+      - dependency-name: typescript
+        update-types:
+          - version-update:semver-major
     groups:
       development:
         dependency-type: development
+        update-types:
+          - minor
+          - patch
       production:
         dependency-type: production
         update-types:
